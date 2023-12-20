@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: frontend:latest
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ds2023devices
+      - ds2023
+      - communication
+
+  ds2023:
+    image: ds2023users:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_IP=mysql_users
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=catdog2001
+      - DB_DBNAME=ds_user2023
+    networks:
+      - organization-mysql
+
+  ds2023devices:
+    image: ds2023_devices:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - DB_IP=mysql_devices
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=catdog2001
+      - DB_DBNAME=ds_device2023
+    networks:
+      - organization-mysql
+
+  communication:
+    image: communication:latest
+    ports:
+      - "8082:8082"
+    environment:
+      - DB_IP=mysql_communication
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=catdog2001
+      - DB_DBNAME=ds_communication2023
+    networks:
+      - organization-mysql
+
+  mysql_users:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=catdog2001
+      - MYSQL_DATABASE=ds_user2023
+    networks:
+      - organization-mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      retries: 10
+
+  mysql_devices:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=catdog2001
+      - MYSQL_DATABASE=ds_device2023
+    networks:
+      - organization-mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      retries: 10
+
+  mysql_communication:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=catdog2001
+      - MYSQL_DATABASE=ds_communication2023
+    networks:
+      - organization-mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      retries: 10
+
+networks:
+  organization-mysql:
+    driver: bridge

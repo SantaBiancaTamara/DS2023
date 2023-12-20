@@ -81,12 +81,13 @@ public class LoginService {
                         loginDTO.getPassword()
                 )
         );
-        var user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder().token(jwtToken).build();
-    }
+                var user = userRepository.findByEmail(loginDTO.getEmail()).orElseThrow();
+                var userId = user.getId();
+                var jwtToken = jwtService.generateToken(user);
+                return AuthenticationResponse.builder().token(jwtToken).userId(userId).build();
+                }
 
-    //method to make the conversion between userDTO and user entity
+                //method to make the conversion between userDTO and user entity
 //    private User convertToUserEntity(UserDTO userDTO) {
 //        return new User(
 //                userDTO.getName(),
@@ -96,4 +97,4 @@ public class LoginService {
 //        );
 //    }
 
-}
+                }

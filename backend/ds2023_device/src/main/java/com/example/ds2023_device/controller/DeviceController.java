@@ -15,6 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/devices")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials="true")
 public class DeviceController {
 
     private final DeviceService deviceService;
@@ -38,11 +39,11 @@ public class DeviceController {
 
 
     @GetMapping("/seeAllUserDevices/{userId}")
-    public ResponseEntity<List<Device>> getAllUserDevices(@PathVariable("userId") UUID userId){
+    public List<Device> getAllUserDevices(@PathVariable("userId") UUID userId){
 
         List<Device> allDevices = deviceService.getAllUserDevices(userId);
 
-        return ResponseEntity.ok(allDevices);
+        return allDevices;
     }
 
     @PutMapping("/updateDevice/{id}")

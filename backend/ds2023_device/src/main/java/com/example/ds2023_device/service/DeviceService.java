@@ -7,19 +7,21 @@ import com.example.ds2023_device.repository.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class DeviceService {
 
     private final DeviceRepository deviceRepository;
+    private final RabbitMQProducer messageProducer;
+
 
     public UUID insertDevice(Device device){
+
         deviceRepository.save(device);
+
+        messageProducer.sendMessage(device);
         return device.getId();
     }
 

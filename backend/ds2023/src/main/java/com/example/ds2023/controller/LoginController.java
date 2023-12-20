@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class LoginController {
 //
 //    }
 
-    @CrossOrigin(origins = "http://localhost:3000")
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody LoginDTO loginDTO) {
         AuthenticationResponse authenticationResponse = loginService.login(loginDTO);

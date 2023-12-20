@@ -36,10 +36,11 @@ public class Device implements Serializable {
     @Column(name = "owner")
     private UUID userId;
 
-    public Device(String description, String address, Float energyTime) {
+    public Device(String description, String address, Float energyTime, UUID userId) {
         this.description = description;
         this.address = address;
         this.energyTime = energyTime;
+        this.userId = userId;
     }
 
 
